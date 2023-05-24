@@ -6,11 +6,12 @@ import {
   MantineProvider,
   MediaQuery,
   Navbar,
-  Text,
   Title,
+  Center,
   useMantineTheme,
 } from '@mantine/core';
 import { useState } from 'react';
+import NavBarLink from './NavBarLink';
 
 export default function App() {
   const theme = useMantineTheme();
@@ -22,12 +23,14 @@ export default function App() {
         padding="md"
         navbar={
           <Navbar hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 200, lg: 300 }} height={500} p="xs">
-            <Text>Navbar content</Text>
+            <Navbar.Section grow mt="xs">
+              <NavBarLink label="TODO: Routing" />
+            </Navbar.Section>
           </Navbar>
         }
         footer={
           <Footer height={60} p="md">
-            Application footer
+            TODO: Application footer
           </Footer>
         }
         header={
@@ -40,7 +43,7 @@ export default function App() {
                   size="sm"
                   color={theme.colors.dark[8]}
                   mr="xl"
-                ></Burger>
+                />
               </MediaQuery>
 
               <Title>Header</Title>
@@ -48,7 +51,9 @@ export default function App() {
           </Header>
         }
       >
-        <Text>Login page</Text>
+        <Center maw={400} mx="auto">
+          <Title order={2}>Login page</Title>
+        </Center>
       </AppShell>
     </MantineProvider>
   );
