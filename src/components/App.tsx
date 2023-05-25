@@ -1,24 +1,30 @@
 import {
   AppShell,
   Burger,
+  Center,
   Footer,
   Header,
   MantineProvider,
   MediaQuery,
   Navbar,
   Title,
-  Center,
+  createEmotionCache,
   useMantineTheme,
 } from '@mantine/core';
 import { useState } from 'react';
+import Login from './Login';
 import NavBarLink from './NavBarLink';
 
 export default function App() {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
+  const myCache = createEmotionCache({
+    key: 'mantine',
+    prepend: false,
+  });
 
   return (
-    <MantineProvider withGlobalStyles withNormalizeCSS>
+    <MantineProvider emotionCache={myCache} withGlobalStyles withNormalizeCSS>
       <AppShell
         padding="md"
         navbar={
@@ -51,8 +57,8 @@ export default function App() {
           </Header>
         }
       >
-        <Center maw={400} mx="auto">
-          <Title order={2}>Login page</Title>
+        <Center maw={400} mx="auto" sx={{ height: '100%' }}>
+          <Login />
         </Center>
       </AppShell>
     </MantineProvider>
