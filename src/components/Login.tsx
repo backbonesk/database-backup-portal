@@ -1,6 +1,9 @@
-import { Button, Center, PasswordInput, Stack, TextInput, Title } from '@mantine/core';
+import { Button, Center, PasswordInput, Stack, Text, TextInput, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
+import { URL } from '../utilities/config';
+import { useGlobalToken } from '../utilities/globals';
 
 interface FormType {
   username: string;
@@ -8,26 +11,39 @@ interface FormType {
 }
 
 function Login() {
+  const [token, setToken] = useGlobalToken();
+
   const form = useForm({
     initialValues: {
       username: '',
       password: '',
     },
   });
-  const [loading, setLoading] = useState(false);
 
-  function onSubmit(values: FormType) {
-    console.log(values);
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
+  const mutation = useMutation({
+    mutationFn: async (values: FormType) => {
+      const { data } = await axios.post(`${URL}/token`, values, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return data;
+    },
+  });
+
+  async function onSubmit(values: FormType) {
+    const data = await mutation.mutateAsync(values);
+    setToken(data['access_token']);
+  }
+
+  if (token) {
+    return <Text c="green">Logged in</Text>;
   }
 
   return (
     <>
       <form className="w-full" onSubmit={form.onSubmit((values) => onSubmit(values))}>
-        <Stack className="w-full max-w-md rounded-md" p="md">
+        <Stack className="w-full max-w-md rounded-md" spacing="xl" p="md">
           <Title order={2} align="center">
             Login
           </Title>
@@ -35,9 +51,14 @@ function Login() {
             <TextInput label="Username" placeholder="Username" {...form.getInputProps('username')} />
             <PasswordInput label="Password" placeholder="Password" {...form.getInputProps('password')} />
           </Stack>
-          <Center mt="md">
-            <Button type="submit" loading={loading}>
-              Submit
+          {mutation.isError ? (
+            <Text c="red" align="center">
+              Error while logging in
+            </Text>
+          ) : null}
+          <Center>
+            <Button type="submit" loading={mutation.isLoading}>
+              Login
             </Button>
           </Center>
         </Stack>
