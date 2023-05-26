@@ -2,7 +2,6 @@ import {
   AppShell,
   Burger,
   Center,
-  Footer,
   Group,
   Header,
   MediaQuery,
@@ -12,17 +11,27 @@ import {
   UnstyledButton,
   useMantineTheme,
 } from '@mantine/core';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { useLocalStorage } from 'react-use';
 import NavBarLink from '../components/NavBarLink';
 import { useGlobalToken } from '../utilities/globals';
-import Login from './Login';
-import { useLocalStorage } from 'react-use';
 
 function Root() {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
   const [token, setToken] = useGlobalToken();
-  const [_localToken, _setLocalToken, removeLocalToken] = useLocalStorage('token');
+  const [localToken, _setLocalToken, removeLocalToken] = useLocalStorage('token');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localToken) {
+      setToken(localToken as string);
+      navigate('/scheduler');
+    } else {
+      navigate('/');
+    }
+  }, [navigate]);
 
   function logOut() {
     removeLocalToken();
@@ -67,7 +76,7 @@ function Root() {
       }
     >
       <Center maw={400} mx="auto" className="h-full">
-        <Login />
+        <Outlet />
       </Center>
     </AppShell>
   );

@@ -2,6 +2,7 @@ import { Button, Center, PasswordInput, Stack, Text, TextInput, Title } from '@m
 import { useForm } from '@mantine/form';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { URL } from '../utilities/config';
 import { useGlobalToken } from '../utilities/globals';
 
@@ -11,7 +12,8 @@ interface FormType {
 }
 
 function Login() {
-  const [token, setToken] = useGlobalToken();
+  const [_token, setToken] = useGlobalToken();
+  const navigate = useNavigate();
 
   const form = useForm({
     initialValues: {
@@ -34,10 +36,7 @@ function Login() {
   async function onSubmit(values: FormType) {
     const data = await mutation.mutateAsync(values);
     setToken(data['access_token']);
-  }
-
-  if (token) {
-    return <Text c="green">Logged in</Text>;
+    navigate('/scheduler');
   }
 
   return (

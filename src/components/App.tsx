@@ -6,6 +6,7 @@ import { useLocalStorage } from 'react-use';
 import ErrorPage from '../routes/ErrorPage';
 import Login from '../routes/Login';
 import Root from '../routes/Root';
+import Scheduler from '../routes/Scheduler';
 import { useGlobalToken } from '../utilities/globals';
 
 const queryClient = new QueryClient();
@@ -21,16 +22,17 @@ export default function App() {
           index: true,
           element: <Login />,
         },
+        {
+          path: 'scheduler',
+          element: <Scheduler />,
+        },
       ],
     },
   ]);
 
-  const [localToken, setLocalToken] = useLocalStorage('token');
-  const [token, setToken] = useGlobalToken();
+  const [_localToken, setLocalToken] = useLocalStorage('token');
+  const [token, _setToken] = useGlobalToken();
 
-  useEffect(() => {
-    if (localToken) setToken(localToken as string);
-  }, []);
   useEffect(() => {
     setLocalToken(token);
   }, [token]);
