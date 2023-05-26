@@ -3,20 +3,31 @@ import {
   Burger,
   Center,
   Footer,
+  Group,
   Header,
   MediaQuery,
   Navbar,
   Stack,
   Title,
+  UnstyledButton,
   useMantineTheme,
 } from '@mantine/core';
 import { useState } from 'react';
 import NavBarLink from '../components/NavBarLink';
+import { useGlobalToken } from '../utilities/globals';
 import Login from './Login';
+import { useLocalStorage } from 'react-use';
 
 function Root() {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
+  const [token, setToken] = useGlobalToken();
+  const [_localToken, _setLocalToken, removeLocalToken] = useLocalStorage('token');
+
+  function logOut() {
+    removeLocalToken();
+    setToken(undefined);
+  }
 
   return (
     <AppShell
@@ -48,8 +59,14 @@ function Root() {
                 mr="xl"
               />
             </MediaQuery>
-
-            <Title order={2}>Database Backup</Title>
+            <Group position="apart" className="w-full">
+              <Title order={2}>Database Backup</Title>
+              {token ? (
+                <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
+                  <UnstyledButton onClick={logOut}>Log out</UnstyledButton>
+                </MediaQuery>
+              ) : null}
+            </Group>
           </div>
         </Header>
       }
