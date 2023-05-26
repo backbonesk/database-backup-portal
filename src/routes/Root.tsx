@@ -1,7 +1,18 @@
-import { AppShell, Burger, Center, Footer, Header, MediaQuery, Navbar, Title, useMantineTheme } from '@mantine/core';
+import {
+  AppShell,
+  Burger,
+  Center,
+  Footer,
+  Header,
+  MediaQuery,
+  Navbar,
+  Stack,
+  Title,
+  useMantineTheme,
+} from '@mantine/core';
 import { useState } from 'react';
-import Login from './Login';
 import NavBarLink from '../components/NavBarLink';
+import Login from './Login';
 
 function Root() {
   const theme = useMantineTheme();
@@ -13,7 +24,10 @@ function Root() {
       navbar={
         <Navbar hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 200, lg: 300 }} height={500} p="xs">
           <Navbar.Section grow mt="xs">
-            <NavBarLink label="TODO: Routing" />
+            <Stack spacing="sm">
+              <NavBarLink label="Login" href="/" />
+              <NavBarLink label="Scheduler" href="/scheduler" />
+            </Stack>
           </Navbar.Section>
         </Navbar>
       }

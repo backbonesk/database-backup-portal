@@ -1,29 +1,20 @@
-import { Group, Text, UnstyledButton, useMantineTheme } from '@mantine/core';
+import { NavLink, useMantineTheme } from '@mantine/core';
+import { NavLink as RouterNavLink } from 'react-router-dom';
 
 interface NavBarLinkProps {
   label: string;
+  href: string;
 }
 
-function NavBarLink({ label }: NavBarLinkProps) {
+function NavBarLink({ label, href }: NavBarLinkProps) {
   const theme = useMantineTheme();
 
   return (
-    <UnstyledButton
-      className="block w-full"
-      sx={{
-        padding: theme.spacing.xs,
-        borderRadius: theme.radius.sm,
-        color: theme.black,
-
-        '&:hover': {
-          backgroundColor: theme.colors.blue[0],
-        },
-      }}
-    >
-      <Group>
-        <Text size="md">{label}</Text>
-      </Group>
-    </UnstyledButton>
+    <RouterNavLink to={href}>
+      {({ isActive }) => (
+        <NavLink label={label} active={isActive} variant="filled" sx={{ borderRadius: theme.radius.md }} />
+      )}
+    </RouterNavLink>
   );
 }
 
