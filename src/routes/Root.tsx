@@ -42,7 +42,7 @@ function Root() {
     <AppShell
       padding="md"
       navbar={
-        <Navbar hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 200, lg: 300 }} height={500} p="xs">
+        <Navbar hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 200, lg: 300 }} p="xs" className="h-full">
           <Navbar.Section grow mt="xs">
             <Stack spacing="sm">
               {!token ? <NavBarLink label="Login" href="/" /> : null}
