@@ -45,7 +45,7 @@ function Root() {
         <Navbar hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 200, lg: 300 }} height={500} p="xs">
           <Navbar.Section grow mt="xs">
             <Stack spacing="sm">
-              <NavBarLink label="Login" href="/" />
+              {!token ? <NavBarLink label="Login" href="/" /> : null}
               <NavBarLink label="Scheduler" href="/scheduler" />
             </Stack>
           </Navbar.Section>
