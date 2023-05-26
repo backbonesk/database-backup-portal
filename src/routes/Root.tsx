@@ -42,11 +42,6 @@ function Root() {
           </Navbar.Section>
         </Navbar>
       }
-      footer={
-        <Footer height={60} p="md">
-          TODO: Application footer
-        </Footer>
-      }
       header={
         <Header height={{ base: 50, md: 70 }} p="md">
           <div className="flex items-center h-full">
@@ -71,7 +66,7 @@ function Root() {
         </Header>
       }
     >
-      <Center maw={400} mx="auto" sx={{ height: '100%' }}>
+      <Center maw={400} mx="auto" className="h-full">
         <Login />
       </Center>
     </AppShell>
