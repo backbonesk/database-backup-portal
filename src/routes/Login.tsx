@@ -36,7 +36,7 @@ function Login() {
   async function onSubmit(values: FormType) {
     const data = await mutation.mutateAsync(values);
     setToken(data['access_token']);
-    navigate('/schedules');
+    navigate('/backups');
   }
 
   return (

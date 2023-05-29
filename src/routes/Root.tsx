@@ -1,16 +1,5 @@
-import {
-  AppShell,
-  Burger,
-  Group,
-  Header,
-  MediaQuery,
-  Navbar,
-  Stack,
-  Title,
-  UnstyledButton,
-  useMantineTheme,
-} from '@mantine/core';
-import { useEffect, useState } from 'react';
+import { AppShell, Burger, Group, Header, MediaQuery, Title, UnstyledButton, useMantineTheme } from '@mantine/core';
+import { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useLocalStorage } from 'react-use';
 import { useGlobalToken } from '../utilities/globals';
@@ -24,7 +13,7 @@ function Root() {
   useEffect(() => {
     if (localToken) {
       setToken(localToken as string);
-      navigate('/schedules');
+      navigate('/backups');
     } else {
       navigate('/');
     }
