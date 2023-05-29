@@ -88,8 +88,7 @@ function Scheduler({ onSubmit }: SchedulerProps) {
         <Stack
           p="lg"
           sx={(theme) => ({
-            backgroundColor: theme.colors.gray[0],
-            borderRadius: theme.radius.md,
+            borderRadius: theme.radius.sm,
             border: `1px solid ${theme.colors.gray[3]}`,
             width: '100vw',
             rowGap: '4rem',
