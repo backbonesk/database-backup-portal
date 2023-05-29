@@ -86,7 +86,10 @@ function RRuleForm({ onSubmit }: SchedulerProps) {
 
   return (
     <>
-      <form className="absolute z-50" onSubmit={form.onSubmit((values) => createRule(values))}>
+      <form
+        className="fixed z-30 inset-0 flex items-center justify-center"
+        onSubmit={form.onSubmit((values) => createRule(values))}
+      >
         <Stack
           p="lg"
           sx={(theme) => ({
