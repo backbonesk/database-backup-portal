@@ -1,7 +1,6 @@
 import {
   AppShell,
   Burger,
-  Center,
   Group,
   Header,
   MediaQuery,
@@ -75,9 +74,7 @@ function Root() {
         </Header>
       }
     >
-      <Center maw={400} mx="auto" className="h-full">
-        <Outlet />
-      </Center>
+      <Outlet />
     </AppShell>
   );
 }

@@ -1,13 +1,13 @@
 import { Button, Group, Stack, Title } from '@mantine/core';
-import RRuleForm from '../components/RRuleForm';
 import { useState } from 'react';
+import RRuleForm from '../components/RRuleForm';
 
 function Schedules() {
   const [visible, setVisible] = useState(false);
 
   return (
     <>
-      {visible && <RRuleForm onSubmit={() => {}} />}
+      {visible && <RRuleForm onSubmit={() => setVisible(false)} />}
       <Stack
         p="lg"
         sx={{

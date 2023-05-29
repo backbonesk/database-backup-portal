@@ -36,32 +36,34 @@ function Login() {
   async function onSubmit(values: FormType) {
     const data = await mutation.mutateAsync(values);
     setToken(data['access_token']);
-    navigate('/scheduler');
+    navigate('/schedules');
   }
 
   return (
     <>
-      <form className="w-full" onSubmit={form.onSubmit((values) => onSubmit(values))}>
-        <Stack className="w-full max-w-md rounded-md" spacing="xl" p="md">
-          <Title order={2} align="center">
-            Login
-          </Title>
-          <Stack spacing="xs">
-            <TextInput label="Username" placeholder="Username" {...form.getInputProps('username')} />
-            <PasswordInput label="Password" placeholder="Password" {...form.getInputProps('password')} />
-          </Stack>
-          {mutation.isError && (
-            <Text c="red" align="center">
-              Error while logging in
-            </Text>
-          )}
-          <Center>
-            <Button type="submit" loading={mutation.isLoading}>
+      <Center maw={400} mx="auto" className="h-full">
+        <form className="w-full" onSubmit={form.onSubmit((values) => onSubmit(values))}>
+          <Stack className="w-full max-w-md rounded-md" spacing="xl" p="md">
+            <Title order={2} align="center">
               Login
-            </Button>
-          </Center>
-        </Stack>
-      </form>
+            </Title>
+            <Stack spacing="xs">
+              <TextInput label="Username" placeholder="Username" {...form.getInputProps('username')} />
+              <PasswordInput label="Password" placeholder="Password" {...form.getInputProps('password')} />
+            </Stack>
+            {mutation.isError && (
+              <Text c="red" align="center">
+                Error while logging in
+              </Text>
+            )}
+            <Center>
+              <Button type="submit" loading={mutation.isLoading}>
+                Login
+              </Button>
+            </Center>
+          </Stack>
+        </form>
+      </Center>
     </>
   );
 }
