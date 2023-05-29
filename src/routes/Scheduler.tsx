@@ -9,8 +9,6 @@ function Scheduler() {
   const form = useForm({
     initialValues: {
       freq: 'WEEKLY',
-      count: '1',
-      interval: '1',
       byWeekDay: '',
       byMonthDay: '',
       byHour: '',
@@ -19,7 +17,6 @@ function Scheduler() {
   });
 
   const FREQUENCIES = ['YEARLY', 'MONTHLY', 'WEEKLY', 'DAILY', 'HOURLY', 'MINUTELY'];
-  const MONTHS = ['Jan', 'Fab', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const WEEK_DAYS = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'];
 
   return (
@@ -49,13 +46,6 @@ function Scheduler() {
               <Group>
                 {WEEK_DAYS.map((day) => (
                   <Radio value={day} label={day} key={useId()} />
-                ))}
-              </Group>
-            </Radio.Group>
-            <Radio.Group name="interval" label="Interval" {...form.getInputProps('interval')}>
-              <Group>
-                {MONTHS.map((month) => (
-                  <Radio value={month} label={month} key={useId()} />
                 ))}
               </Group>
             </Radio.Group>
