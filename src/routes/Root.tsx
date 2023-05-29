@@ -27,7 +27,7 @@ function Root() {
   useEffect(() => {
     if (localToken) {
       setToken(localToken as string);
-      navigate('/scheduler');
+      navigate('/schedules');
     } else {
       navigate('/');
     }
@@ -46,7 +46,7 @@ function Root() {
           <Navbar.Section grow mt="xs">
             <Stack spacing="sm">
               {!token ? <NavBarLink label="Login" href="/" /> : null}
-              <NavBarLink label="Scheduler" href="/scheduler" />
+              <NavBarLink label="Schedules" href="/schedules" />
             </Stack>
           </Navbar.Section>
         </Navbar>
