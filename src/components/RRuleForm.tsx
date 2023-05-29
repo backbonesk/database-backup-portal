@@ -16,8 +16,9 @@ type SchedulerProps = {
   onSubmit: (rrule: RRule) => void;
 };
 
-function Scheduler({ onSubmit }: SchedulerProps) {
+function RRuleForm({ onSubmit }: SchedulerProps) {
   const [rruleString, setRruleString] = useState('');
+  const [rruleText, setRruleText] = useState('');
 
   const form = useForm({
     initialValues: {
@@ -80,15 +81,17 @@ function Scheduler({ onSubmit }: SchedulerProps) {
     const options = getRRuleOptions(form.values);
     const rule = new RRule(options);
     setRruleString(rule.toString());
+    setRruleText(rule.toText());
   }, [form.values]);
 
   return (
     <>
-      <form onSubmit={form.onSubmit((values) => createRule(values))}>
+      <form className="absolute z-50" onSubmit={form.onSubmit((values) => createRule(values))}>
         <Stack
           p="lg"
           sx={(theme) => ({
             borderRadius: theme.radius.sm,
+            backgroundColor: theme.white,
             border: `1px solid ${theme.colors.gray[3]}`,
             width: '100vw',
             rowGap: '4rem',
@@ -121,13 +124,14 @@ function Scheduler({ onSubmit }: SchedulerProps) {
             <NumberInput className="w-full" label="By Hour" min={1} max={24} {...form.getInputProps('byHour')} />
             <NumberInput className="w-full" label="By Minute" min={1} max={60} {...form.getInputProps('byMinute')} />
           </Stack>
-          {rruleString && (
-            <Center>
+          <Center>
+            <Stack>
               <Code block>{rruleString}</Code>
-            </Center>
-          )}
+              <Code block>{rruleText}</Code>
+            </Stack>
+          </Center>
           <Group grow>
-            <Button type="submit">Create</Button>
+            <Button type="submit">Add</Button>
             <Button onClick={() => form.reset()}>Reset</Button>
           </Group>
         </Stack>
@@ -136,4 +140,4 @@ function Scheduler({ onSubmit }: SchedulerProps) {
   );
 }
 
-export default Scheduler;
+export default RRuleForm;

@@ -6,6 +6,7 @@ import { useLocalStorage } from 'react-use';
 import ErrorPage from '../routes/ErrorPage';
 import Login from '../routes/Login';
 import Root from '../routes/Root';
+import Schedules from '../routes/Schedules';
 import { useGlobalToken } from '../utilities/globals';
 
 const queryClient = new QueryClient();
@@ -23,7 +24,7 @@ export default function App() {
         },
         {
           path: 'schedules',
-          element: <p>Schedules</p>,
+          element: <Schedules />,
         },
       ],
     },

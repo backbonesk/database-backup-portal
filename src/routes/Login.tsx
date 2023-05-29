@@ -50,11 +50,11 @@ function Login() {
             <TextInput label="Username" placeholder="Username" {...form.getInputProps('username')} />
             <PasswordInput label="Password" placeholder="Password" {...form.getInputProps('password')} />
           </Stack>
-          {mutation.isError ? (
+          {mutation.isError && (
             <Text c="red" align="center">
               Error while logging in
             </Text>
-          ) : null}
+          )}
           <Center>
             <Button type="submit" loading={mutation.isLoading}>
               Login
