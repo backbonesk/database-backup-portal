@@ -1,5 +1,6 @@
 import { Button, Code, Stack, TextInput, Title, Radio, Group } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { useId } from '@mantine/hooks';
 import { useState } from 'react';
 
 function Scheduler() {
@@ -11,21 +12,21 @@ function Scheduler() {
       count: '1',
       interval: '1',
       byWeekDay: '',
-      byMonth: '',
       byMonthDay: '',
-      byYearDay: '',
-      byWeekNo: '',
       byHour: '',
       byMinute: '',
     },
   });
 
+  const FREQUENCIES = ['YEARLY', 'MONTHLY', 'WEEKLY', 'DAILY', 'HOURLY', 'MINUTELY'];
+  const MONTHS = ['Jan', 'Fab', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const WEEK_DAYS = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'];
+
   return (
     <>
       <form onSubmit={form.onSubmit((values) => setSubmittedValues(JSON.stringify(values, null, 2)))}>
         <Stack
-          px="lg"
-          py="md"
+          p="lg"
           sx={(theme) => ({
             backgroundColor: theme.colors.gray[0],
             borderRadius: theme.radius.md,
@@ -36,28 +37,37 @@ function Scheduler() {
           className="max-w-xl"
         >
           <Title>Schedule Creator</Title>
-          <Stack spacing="sm">
+          <Stack>
             <Radio.Group name="freq" label="Frequency" {...form.getInputProps('freq')}>
               <Group>
-                <Radio value="YEARLY" label="YEARLY" />
-                <Radio value="MONTHLY" label="MONTHLY" />
-                <Radio value="WEEKLY" label="WEEKLY" />
-                <Radio value="DAILY" label="DAILY" />
-                <Radio value="HOURLY" label="HOURLY" />
-                <Radio value="MINUTELY" label="MINUTELY" />
+                {FREQUENCIES.map((freq) => (
+                  <Radio value={freq} label={freq} key={useId()} />
+                ))}
               </Group>
             </Radio.Group>
-            <TextInput className="w-full" label="By Week Day" {...form.getInputProps('byWeekDay')} />
-            <TextInput className="w-full" type="number" label="Interval" {...form.getInputProps('interval')} />
-            <TextInput className="w-full" label="By Month" {...form.getInputProps('byMonth')} />
+            <Radio.Group name="byWeekDay" label="By Week Day" {...form.getInputProps('byWeekDay')}>
+              <Group>
+                {WEEK_DAYS.map((day) => (
+                  <Radio value={day} label={day} key={useId()} />
+                ))}
+              </Group>
+            </Radio.Group>
+            <Radio.Group name="interval" label="Interval" {...form.getInputProps('interval')}>
+              <Group>
+                {MONTHS.map((month) => (
+                  <Radio value={month} label={month} key={useId()} />
+                ))}
+              </Group>
+            </Radio.Group>
             <TextInput className="w-full" label="By Month Day" {...form.getInputProps('byMonthDay')} />
-            <TextInput className="w-full" label="By Year Day" {...form.getInputProps('byYearDay')} />
-            <TextInput className="w-full" label="By Week Number" {...form.getInputProps('byWeekNumber')} />
             <TextInput className="w-full" label="By Hour" {...form.getInputProps('byHour')} />
             <TextInput className="w-full" label="By Minute" {...form.getInputProps('byMinute')} />
           </Stack>
-          <Button type="submit">Submit</Button>
           {submittedValues && <Code block>{submittedValues}</Code>}
+          <Group grow>
+            <Button type="submit">Submit</Button>
+            <Button onClick={() => form.reset()}>Reset</Button>
+          </Group>
         </Stack>
       </form>
     </>
