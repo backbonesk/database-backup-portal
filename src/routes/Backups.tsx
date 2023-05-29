@@ -8,7 +8,8 @@ function Backups() {
 
   return (
     <>
-      {visible && <RRuleForm onSubmit={() => setVisible(false)} />}
+      {visible && <RRuleForm onSubmit={(rule) => setVisible(false)} />}
+
       <Stack
         p="lg"
         sx={{
@@ -20,7 +21,9 @@ function Backups() {
           <Title>Backups Manager</Title>
           <Text c="dimmed">List of database backup schedules</Text>
           <div className="fixed z-10 bottom-5 flex justify-center">
-            <Button size="md">Add Schedule</Button>
+            <Button size="md" onClick={() => setVisible(true)}>
+              Add Schedule
+            </Button>
           </div>
         </Center>
         <Title order={2}>BACKUPS ({schedulesCount})</Title>
