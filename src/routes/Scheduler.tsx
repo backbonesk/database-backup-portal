@@ -1,8 +1,8 @@
-import { Button, Code, Stack, TextInput, NumberInput, Title, Radio, Group } from '@mantine/core';
+import { Button, Center, Code, Group, NumberInput, Radio, Stack, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useId } from '@mantine/hooks';
-import { useState } from 'react';
-import { Frequency, RRule } from 'rrule';
+import { useEffect, useState } from 'react';
+import { Frequency, Options, RRule } from 'rrule';
 
 type FormValuesType = {
   freq: string;
@@ -12,7 +12,11 @@ type FormValuesType = {
   byMinute: string;
 };
 
-function Scheduler() {
+type SchedulerProps = {
+  onSubmit: (rrule: RRule) => void;
+};
+
+function Scheduler({ onSubmit }: SchedulerProps) {
   const [rruleString, setRruleString] = useState('');
 
   const form = useForm({
@@ -28,7 +32,7 @@ function Scheduler() {
   const FREQUENCIES = ['MONTHLY', 'WEEKLY', 'DAILY', 'HOURLY', 'MINUTELY'];
   const WEEK_DAYS = ['MU', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'];
 
-  function onSubmit(values: FormValuesType) {
+  function getRRuleOptions(values: FormValuesType): Partial<Options> {
     let freq: Frequency | undefined;
     switch (values.freq) {
       case 'MONTHLY':
@@ -55,21 +59,32 @@ function Scheduler() {
     const byHour = values.byHour.length == 0 ? undefined : parseInt(values.byHour);
     const byMinute = values.byMinute.length == 0 ? undefined : parseInt(values.byMinute);
 
-    const rule = new RRule({
+    return {
       freq,
       count: 1,
       ...(byWeekDay != undefined && { byweekday: byWeekDay }),
       ...(byMonthDay && { bymonthday: byMonthDay }),
       ...(byHour && { byhour: byHour }),
       ...(byMinute && { byminute: byMinute }),
-    });
-
-    setRruleString(rule.toString());
+    };
   }
+
+  function createRule(values: FormValuesType) {
+    const options = getRRuleOptions(values);
+    const rule = new RRule(options);
+
+    onSubmit(rule);
+  }
+
+  useEffect(() => {
+    const options = getRRuleOptions(form.values);
+    const rule = new RRule(options);
+    setRruleString(rule.toString());
+  }, [form.values]);
 
   return (
     <>
-      <form onSubmit={form.onSubmit((values) => onSubmit(values))}>
+      <form onSubmit={form.onSubmit((values) => createRule(values))}>
         <Stack
           p="lg"
           sx={(theme) => ({
@@ -81,7 +96,7 @@ function Scheduler() {
           })}
           className="max-w-xl"
         >
-          <Title>Schedule Creator</Title>
+          <Title>RRule Creator</Title>
           <Stack>
             <Radio.Group name="freq" label="Frequency" {...form.getInputProps('freq')}>
               <Group>
@@ -104,10 +119,14 @@ function Scheduler() {
               max={31}
               {...form.getInputProps('byMonthDay')}
             />
-            <NumberInput className="w-full" label="By Hour" min={0} max={24} {...form.getInputProps('byHour')} />
-            <NumberInput className="w-full" label="By Minute" min={0} max={60} {...form.getInputProps('byMinute')} />
+            <NumberInput className="w-full" label="By Hour" min={1} max={24} {...form.getInputProps('byHour')} />
+            <NumberInput className="w-full" label="By Minute" min={1} max={60} {...form.getInputProps('byMinute')} />
           </Stack>
-          {rruleString && <Code block>{rruleString}</Code>}
+          {rruleString && (
+            <Center>
+              <Code block>{rruleString}</Code>
+            </Center>
+          )}
           <Group grow>
             <Button type="submit">Create</Button>
             <Button onClick={() => form.reset()}>Reset</Button>
