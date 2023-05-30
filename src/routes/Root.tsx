@@ -17,7 +17,7 @@ function Root() {
     } else {
       navigate('/');
     }
-  }, [navigate]);
+  }, []);
 
   function logOut() {
     removeLocalToken();
