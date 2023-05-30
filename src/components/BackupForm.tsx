@@ -1,12 +1,17 @@
 import { Button, Group, Stack, TextInput, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { useState } from 'react';
+import RRuleForm from './RRuleForm';
 import { BackupFormValues } from '../utilities/types';
+import { RRule } from 'rrule';
 
 type BackupFormProps = {
   onSubmit: (values: BackupFormValues) => void;
 };
 
 function BackupForm({ onSubmit }: BackupFormProps) {
+  const [formVisible, setFormVisible] = useState(false);
+
   const form = useForm({
     initialValues: {
       host: '',
@@ -18,13 +23,20 @@ function BackupForm({ onSubmit }: BackupFormProps) {
     },
   });
 
+  function onRRuleCreate(rule: RRule) {
+    form.setFieldValue('schedule', rule.toString());
+    setFormVisible(false);
+  }
+
   return (
     <>
+      {formVisible && <RRuleForm onSubmit={onRRuleCreate} />}
+
+      <div className="overlay" />
       <form
-        className="fixed inset-0 flex items-center justify-center"
+        className="fixed inset-0 z-20 flex items-center justify-center"
         onSubmit={form.onSubmit((values) => onSubmit(values))}
       >
-        <div className="overlay" />
         <Stack
           p="lg"
           sx={(theme) => ({
@@ -34,15 +46,19 @@ function BackupForm({ onSubmit }: BackupFormProps) {
             width: '100vw',
             rowGap: '4rem',
           })}
-          className="z-10 max-w-xl"
+          className="max-w-xl"
         >
           <Title>Backup Schedule Creator</Title>
           <Stack>
             <TextInput className="w-full" label="Host" {...form.getInputProps('host')} />
-            <TextInput className="w-full" label="Username" {...form.getInputProps('password')} />
+            <TextInput className="w-full" label="Username" {...form.getInputProps('username')} />
+            <TextInput className="w-full" label="Password" {...form.getInputProps('password')} />
             <TextInput className="w-full" label="Port" {...form.getInputProps('port')} />
             <TextInput className="w-full" label="DB Name" {...form.getInputProps('dbName')} />
-            <TextInput className="w-full" label="Schedule" {...form.getInputProps('schedule')} />
+            <div className="flex gap-x-1 items-end">
+              <TextInput className="w-full grow" label="RRule Schedule" {...form.getInputProps('schedule')} />
+              <Button onClick={() => setFormVisible(true)}>Create</Button>
+            </div>
           </Stack>
           <Group grow>
             <Button type="submit">Add</Button>

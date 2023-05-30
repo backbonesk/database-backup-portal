@@ -4,13 +4,13 @@ import { useId } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
 import { Frequency, Options, RRule } from 'rrule';
 
-type FormValuesType = {
+interface RRuleFormValues {
   freq: string;
   byWeekDay: string;
   byMonthDay: string;
   byHour: string;
   byMinute: string;
-};
+}
 
 type SchedulerProps = {
   onSubmit: (rrule: RRule) => void;
@@ -33,7 +33,7 @@ function RRuleForm({ onSubmit }: SchedulerProps) {
   const FREQUENCIES = ['MONTHLY', 'WEEKLY', 'DAILY', 'HOURLY', 'MINUTELY'];
   const WEEK_DAYS = ['MU', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'];
 
-  function getRRuleOptions(values: FormValuesType): Partial<Options> {
+  function getRRuleOptions(values: RRuleFormValues): Partial<Options> {
     let freq: Frequency | undefined;
     switch (values.freq) {
       case 'MONTHLY':
@@ -70,7 +70,7 @@ function RRuleForm({ onSubmit }: SchedulerProps) {
     };
   }
 
-  function createRule(values: FormValuesType) {
+  function createRule(values: RRuleFormValues) {
     const options = getRRuleOptions(values);
     const rule = new RRule(options);
 
