@@ -1,7 +1,12 @@
 import { Button, Group, Stack, TextInput, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { BackupFormValues } from '../utilities/types';
 
-function BackupForm() {
+type BackupFormProps = {
+  onSubmit: (values: BackupFormValues) => void;
+};
+
+function BackupForm({ onSubmit }: BackupFormProps) {
   const form = useForm({
     initialValues: {
       host: '',
@@ -15,7 +20,11 @@ function BackupForm() {
 
   return (
     <>
-      <form className="fixed z-30 inset-0 flex items-center justify-center" onSubmit={form.onSubmit((values) => {})}>
+      <form
+        className="fixed inset-0 flex items-center justify-center"
+        onSubmit={form.onSubmit((values) => onSubmit(values))}
+      >
+        <div className="overlay" />
         <Stack
           p="lg"
           sx={(theme) => ({
@@ -25,7 +34,7 @@ function BackupForm() {
             width: '100vw',
             rowGap: '4rem',
           })}
-          className="max-w-xl"
+          className="z-10 max-w-xl"
         >
           <Title>Backup Schedule Creator</Title>
           <Stack>

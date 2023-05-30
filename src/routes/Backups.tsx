@@ -1,14 +1,20 @@
 import { Button, Center, Group, Stack, Text, Title } from '@mantine/core';
 import { useState } from 'react';
 import BackupForm from '../components/BackupForm';
+import { BackupFormValues } from '../utilities/types';
 
 function Backups() {
   const [visible, setVisible] = useState(false);
   const [schedulesCount, setSchedulesCount] = useState(0);
 
+  function onSubmit(values: BackupFormValues) {
+    console.log(values);
+    setVisible(false);
+  }
+
   return (
     <>
-      {visible && <BackupForm />}
+      {visible && <BackupForm onSubmit={onSubmit} />}
 
       <Stack
         p="lg"
