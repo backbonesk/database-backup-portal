@@ -1,12 +1,23 @@
-import { AppShell, Burger, Group, Header, MediaQuery, Title, UnstyledButton, useMantineTheme } from '@mantine/core';
+import {
+  AppShell,
+  Burger,
+  Group,
+  Header,
+  LoadingOverlay,
+  MediaQuery,
+  Title,
+  UnstyledButton,
+  useMantineTheme,
+} from '@mantine/core';
 import { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useLocalStorage } from 'react-use';
-import { useGlobalToken } from '../utilities/globals';
+import { useGlobalLoading, useGlobalToken } from '../utilities/stores';
 
 function Root() {
   const theme = useMantineTheme();
   const [token, setToken] = useGlobalToken();
+  const [loading, setLoading] = useGlobalLoading();
   const [localToken, _setLocalToken, removeLocalToken] = useLocalStorage('token');
   const navigate = useNavigate();
 
@@ -46,6 +57,7 @@ function Root() {
         </Header>
       }
     >
+      {loading && <LoadingOverlay visible={loading} overlayBlur={2} />}
       <Outlet />
     </AppShell>
   );

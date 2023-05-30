@@ -3,11 +3,11 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { useLocalStorage } from 'react-use';
+import Backups from '../routes/Backups';
 import ErrorPage from '../routes/ErrorPage';
 import Login from '../routes/Login';
 import Root from '../routes/Root';
-import Backups from '../routes/Backups';
-import { useGlobalToken } from '../utilities/globals';
+import { useGlobalToken } from '../utilities/stores';
 
 const queryClient = new QueryClient();
 

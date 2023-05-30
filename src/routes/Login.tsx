@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { URL } from '../utilities/config';
-import { useGlobalToken } from '../utilities/globals';
+import { useGlobalToken } from '../utilities/stores';
 
 interface FormType {
   username: string;
