@@ -9,7 +9,11 @@ import Login from '../routes/Login';
 import Root from '../routes/Root';
 import { useGlobalToken } from '../utilities/stores';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { refetchOnWindowFocus: false },
+  },
+});
 
 export default function App() {
   const router = createBrowserRouter([
