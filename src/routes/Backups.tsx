@@ -1,6 +1,6 @@
 import { Button, Center, Group, Stack, Table, Text, Title } from '@mantine/core';
 import { useId } from '@mantine/hooks';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useLocalStorage } from 'react-use';
@@ -21,6 +21,23 @@ function Backups() {
   const [token] = useLocalStorage('token');
   const id = useId();
 
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: async (values: BackupFormValues) => {
+      const { data } = await axios.put(`${URL}/backup_schedule`, values, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['backupSchedules'] });
+    },
+  });
+
   const { isLoading, data } = useQuery({
     queryKey: ['backupSchedules'],
     queryFn: (): Promise<BackupSchedule[]> =>
@@ -33,6 +50,10 @@ function Backups() {
         .then((res) => res.data),
   });
 
+  useEffect(() => {
+    setLoading(isLoading);
+  }, [isLoading]);
+
   const rows = data?.map((element, idx) => (
     <tr key={`${id}-${idx}`}>
       <td>{element.dbname}</td>
@@ -41,16 +62,15 @@ function Backups() {
     </tr>
   ));
 
-  useEffect(() => {
-    setLoading(isLoading);
-  }, [isLoading]);
-
-  function onSubmit(values: BackupFormValues | undefined) {
+  async function onSubmit(values: BackupFormValues | undefined) {
     if (!values) {
       setVisible(false);
       return;
     }
-    console.log(values);
+
+    const data = await mutation.mutateAsync(values);
+    console.log(data);
+
     setVisible(false);
   }
 

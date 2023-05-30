@@ -18,13 +18,13 @@ function BackupForm({ onSubmit }: BackupFormProps) {
       username: '',
       password: '',
       port: '',
-      dbName: '',
-      schedule: '',
+      dbname: '',
+      rrulestring: '',
     },
   });
 
   function onRRuleCreate(rule: RRule) {
-    form.setFieldValue('schedule', rule.toString());
+    form.setFieldValue('rrulestring', rule.toString());
     setFormVisible(false);
   }
 
@@ -54,9 +54,9 @@ function BackupForm({ onSubmit }: BackupFormProps) {
             <TextInput className="w-full" label="Username" {...form.getInputProps('username')} />
             <TextInput className="w-full" label="Password" {...form.getInputProps('password')} />
             <TextInput className="w-full" label="Port" {...form.getInputProps('port')} />
-            <TextInput className="w-full" label="DB Name" {...form.getInputProps('dbName')} />
+            <TextInput className="w-full" label="DB Name" {...form.getInputProps('dbname')} />
             <div className="flex gap-x-1 items-end">
-              <TextInput className="w-full grow" label="RRule Schedule" {...form.getInputProps('schedule')} />
+              <TextInput className="w-full grow" label="RRule Schedule" {...form.getInputProps('rrulestring')} />
               <Button onClick={() => setFormVisible(true)}>Create</Button>
             </div>
           </Stack>
