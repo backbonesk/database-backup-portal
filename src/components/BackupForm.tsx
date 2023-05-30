@@ -6,7 +6,7 @@ import { BackupFormValues } from '../utilities/types';
 import { RRule } from 'rrule';
 
 type BackupFormProps = {
-  onSubmit: (values: BackupFormValues) => void;
+  onSubmit: (values: BackupFormValues | undefined) => void;
 };
 
 function BackupForm({ onSubmit }: BackupFormProps) {
@@ -63,6 +63,7 @@ function BackupForm({ onSubmit }: BackupFormProps) {
           <Group grow>
             <Button type="submit">Add</Button>
             <Button onClick={() => form.reset()}>Reset</Button>
+            <Button onClick={() => onSubmit(undefined)}>Cancel</Button>
           </Group>
         </Stack>
       </form>

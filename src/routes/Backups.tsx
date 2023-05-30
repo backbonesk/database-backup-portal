@@ -7,7 +7,11 @@ function Backups() {
   const [visible, setVisible] = useState(false);
   const [schedulesCount, setSchedulesCount] = useState(0);
 
-  function onSubmit(values: BackupFormValues) {
+  function onSubmit(values: BackupFormValues | undefined) {
+    if (!values) {
+      setVisible(false);
+      return;
+    }
     console.log(values);
     setVisible(false);
   }
