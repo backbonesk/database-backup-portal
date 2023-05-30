@@ -17,7 +17,7 @@ import { useGlobalLoading, useGlobalToken } from '../utilities/stores';
 function Root() {
   const theme = useMantineTheme();
   const [token, setToken] = useGlobalToken();
-  const [loading, setLoading] = useGlobalLoading();
+  const [loading, _setLoading] = useGlobalLoading();
   const [localToken, _setLocalToken, removeLocalToken] = useLocalStorage('token');
   const navigate = useNavigate();
 
