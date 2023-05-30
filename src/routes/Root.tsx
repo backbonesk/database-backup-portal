@@ -22,6 +22,7 @@ function Root() {
   function logOut() {
     removeLocalToken();
     setToken(undefined);
+    navigate('/');
   }
 
   return (
