@@ -64,7 +64,6 @@ function BackupForm({ onSubmit }: BackupFormProps) {
             <Button color="green" type="submit">
               Add
             </Button>
-            <Button onClick={() => form.reset()}>Reset</Button>
             <Button color="red" onClick={() => onSubmit(undefined)}>
               Discard
             </Button>
