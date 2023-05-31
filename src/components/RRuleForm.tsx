@@ -134,7 +134,9 @@ function RRuleForm({ onSubmit }: SchedulerProps) {
             </Stack>
           </Center>
           <Group grow>
-            <Button type="submit">Add</Button>
+            <Button color="green" type="submit">
+              Add
+            </Button>
             <Button onClick={() => form.reset()}>Reset</Button>
           </Group>
         </Stack>

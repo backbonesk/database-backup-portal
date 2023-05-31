@@ -61,9 +61,13 @@ function BackupForm({ onSubmit }: BackupFormProps) {
             </div>
           </Stack>
           <Group grow>
-            <Button type="submit">Add</Button>
+            <Button color="green" type="submit">
+              Add
+            </Button>
             <Button onClick={() => form.reset()}>Reset</Button>
-            <Button onClick={() => onSubmit(undefined)}>Cancel</Button>
+            <Button color="red" onClick={() => onSubmit(undefined)}>
+              Discard
+            </Button>
           </Group>
         </Stack>
       </form>
