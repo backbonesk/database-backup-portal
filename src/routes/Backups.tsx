@@ -41,9 +41,8 @@ function Backups() {
 
   const addMutation = useMutation({
     mutationFn: async (values: BackupFormValues) => {
-      await axios.put(`${URL}/backup_schedule`, values, {
+      await axios.post(`${URL}/backup_schedule`, values, {
         headers: {
-          'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,
         },
       });

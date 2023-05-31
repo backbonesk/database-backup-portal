@@ -5,6 +5,7 @@ interface BackupFormValues {
   port: string;
   dbname: string;
   rrulestring: string;
+  backupdest: string;
 }
 
 export type { BackupFormValues };

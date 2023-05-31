@@ -17,9 +17,10 @@ function BackupForm({ onSubmit }: BackupFormProps) {
       host: '',
       username: '',
       password: '',
-      port: '',
+      port: '5432',
       dbname: '',
       rrulestring: '',
+      backupdest: '',
     },
   });
 
@@ -59,6 +60,7 @@ function BackupForm({ onSubmit }: BackupFormProps) {
               <TextInput className="w-full grow" label="RRule Schedule" {...form.getInputProps('rrulestring')} />
               <Button onClick={() => setFormVisible(true)}>Create</Button>
             </div>
+            <TextInput className="w-full" label="Backup Destination" {...form.getInputProps('backupdest')} />
           </Stack>
           <Group grow>
             <Button color="green" type="submit">
