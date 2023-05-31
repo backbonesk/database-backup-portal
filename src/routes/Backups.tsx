@@ -1,4 +1,4 @@
-import { Button, Center, Group, Stack, Table, Text, Title } from '@mantine/core';
+import { Button, Center, Group, Stack, Table, Text, Title, UnstyledButton } from '@mantine/core';
 import { useId } from '@mantine/hooks';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
@@ -10,6 +10,7 @@ import { useGlobalLoading } from '../utilities/stores';
 import { BackupFormValues } from '../utilities/types';
 
 type BackupSchedule = {
+  uuid: string;
   dbname: string;
   host: string;
   rrulestring: string;
@@ -23,22 +24,34 @@ function Backups() {
 
   const queryClient = useQueryClient();
 
-  const mutation = useMutation({
+  function invalidateSchedules() {
+    queryClient.invalidateQueries({ queryKey: ['backupSchedules'] });
+  }
+
+  const deleteMutation = useMutation({
+    mutationFn: async (uuid: string) => {
+      await axios.delete(`${URL}/backup_schedule?uuid=${uuid}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    },
+    onSuccess: () => invalidateSchedules(),
+  });
+
+  const addMutation = useMutation({
     mutationFn: async (values: BackupFormValues) => {
-      const { data } = await axios.put(`${URL}/backup_schedule`, values, {
+      await axios.put(`${URL}/backup_schedule`, values, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,
         },
       });
-      return data;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['backupSchedules'] });
-    },
+    onSuccess: () => invalidateSchedules(),
   });
 
-  const { isLoading, data } = useQuery({
+  const { isFetching, data } = useQuery({
     queryKey: ['backupSchedules'],
     queryFn: (): Promise<BackupSchedule[]> =>
       axios
@@ -51,14 +64,23 @@ function Backups() {
   });
 
   useEffect(() => {
-    setLoading(isLoading);
-  }, [isLoading]);
+    if (isFetching || addMutation.isLoading || deleteMutation.isLoading) {
+      setLoading(true);
+    } else {
+      setLoading(false);
+    }
+  }, [isFetching, addMutation.isLoading, deleteMutation.isLoading]);
 
   const rows = data?.map((element, idx) => (
     <tr key={`${id}-${idx}`}>
       <td>{element.dbname}</td>
       <td>{element.host}</td>
       <td>{element.rrulestring}</td>
+      <td className="flex justify-end">
+        <UnstyledButton c="red" onClick={async () => await deleteMutation.mutateAsync(element.uuid)}>
+          Delete
+        </UnstyledButton>
+      </td>
     </tr>
   ));
 
@@ -68,8 +90,7 @@ function Backups() {
       return;
     }
 
-    const data = await mutation.mutateAsync(values);
-    console.log(data);
+    await addMutation.mutateAsync(values);
 
     setVisible(false);
   }
@@ -102,6 +123,7 @@ function Backups() {
                 <th>DB Name</th>
                 <th>Host</th>
                 <th>RRule</th>
+                <th />
               </tr>
             </thead>
             <tbody>{rows}</tbody>
