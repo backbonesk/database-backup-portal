@@ -1,9 +1,9 @@
-import { Button, Group, Stack, TextInput, Title } from '@mantine/core';
+import { Button, Group, Stack, TextInput, PasswordInput, Title } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
-import RRuleForm from './RRuleForm';
-import { BackupFormValues } from '../utilities/types';
 import { RRule } from 'rrule';
+import { BackupFormValues } from '../utilities/types';
+import RRuleForm from './RRuleForm';
 
 type BackupFormProps = {
   onSubmit: (values: BackupFormValues | undefined) => void;
@@ -52,7 +52,7 @@ function BackupForm({ onSubmit }: BackupFormProps) {
           <Stack>
             <TextInput className="w-full" label="Host" {...form.getInputProps('host')} />
             <TextInput className="w-full" label="Username" {...form.getInputProps('username')} />
-            <TextInput className="w-full" label="Password" {...form.getInputProps('password')} />
+            <PasswordInput className="w-full" label="Password" {...form.getInputProps('password')} />
             <TextInput className="w-full" label="Port" {...form.getInputProps('port')} />
             <TextInput className="w-full" label="DB Name" {...form.getInputProps('dbname')} />
             <div className="flex gap-x-1 items-end">
