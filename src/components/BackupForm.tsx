@@ -19,13 +19,13 @@ function BackupForm({ onSubmit }: BackupFormProps) {
       password: '',
       port: '5432',
       dbname: '',
-      rrulestring: '',
-      backupdest: '',
+      rrule: '',
+      destination: '',
     },
   });
 
   function onRRuleCreate(rule: RRule) {
-    form.setFieldValue('rrulestring', rule.toString());
+    form.setFieldValue('rrule', rule.toString());
     setFormVisible(false);
   }
 
@@ -57,10 +57,10 @@ function BackupForm({ onSubmit }: BackupFormProps) {
             <TextInput className="w-full" label="Port" {...form.getInputProps('port')} />
             <TextInput className="w-full" label="DB Name" {...form.getInputProps('dbname')} />
             <div className="flex gap-x-1 items-end">
-              <TextInput className="w-full grow" label="RRule Schedule" {...form.getInputProps('rrulestring')} />
+              <TextInput className="w-full grow" label="RRule" {...form.getInputProps('rrule')} />
               <Button onClick={() => setFormVisible(true)}>Create</Button>
             </div>
-            <TextInput className="w-full" label="Backup Destination" {...form.getInputProps('backupdest')} />
+            <TextInput className="w-full" label="Backup Destination" {...form.getInputProps('destination')} />
           </Stack>
           <Group grow>
             <Button color="green" type="submit">

@@ -13,7 +13,8 @@ type BackupSchedule = {
   uuid: string;
   dbname: string;
   host: string;
-  rrulestring: string;
+  rrule: string;
+  status: string;
 };
 
 function Backups() {
@@ -72,9 +73,13 @@ function Backups() {
 
   const rows = data?.map((element, idx) => (
     <tr key={`${id}-${idx}`}>
+      <td>
+        <Text c="gray">{idx + 1}</Text>
+      </td>
       <td>{element.dbname}</td>
       <td>{element.host}</td>
-      <td>{element.rrulestring}</td>
+      <td>{element.rrule}</td>
+      <td className="uppercase">{element.status}</td>
       <td className="flex justify-end">
         <UnstyledButton c="red" onClick={async () => await deleteMutation.mutateAsync(element.uuid)}>
           Delete
@@ -119,9 +124,11 @@ function Backups() {
           <Table highlightOnHover={true}>
             <thead>
               <tr>
+                <th />
                 <th>DB Name</th>
                 <th>Host</th>
                 <th>RRule</th>
+                <th>Status</th>
                 <th />
               </tr>
             </thead>
