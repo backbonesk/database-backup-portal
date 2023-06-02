@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { URL } from '../utilities/config';
-import { useGlobalToken } from '../utilities/stores';
+import { useLocalStorage } from 'react-use';
 
 interface FormType {
   username: string;
@@ -12,7 +12,7 @@ interface FormType {
 }
 
 function Login() {
-  const [_token, setToken] = useGlobalToken();
+  const [_token, setToken] = useLocalStorage('token');
   const navigate = useNavigate();
 
   const form = useForm({

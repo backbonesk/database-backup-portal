@@ -1,14 +1,14 @@
 import { Button, Center, Group, Stack, Table, Text, Title, UnstyledButton } from '@mantine/core';
-import { useId } from '@mantine/hooks';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from 'react-use';
 import BackupForm from '../components/BackupForm';
-import { URL } from '../utilities/config';
-import { useGlobalLoading } from '../utilities/stores';
-import { BackupFormValues, BackupScheduleRecord } from '../utilities/types';
 import RecordModal from '../components/RecordModal';
+import { URL } from '../utilities/config';
+import { useGlobalLoading, useGlobalToken } from '../utilities/stores';
+import { BackupFormValues, BackupScheduleRecord } from '../utilities/types';
 
 type BackupSchedule = {
   uuid: string;
@@ -23,8 +23,9 @@ function Backups() {
   const [backupRecords, setBackupRecords] = useState<BackupScheduleRecord[]>();
 
   const [_loading, setLoading] = useGlobalLoading();
-  const [token] = useLocalStorage('token');
-  const id = useId();
+  const [token, _setToken, removeToken] = useLocalStorage('token');
+  const [_globalToken, setGlobalToken] = useGlobalToken();
+  const navigate = useNavigate();
 
   const queryClient = useQueryClient();
 
@@ -65,16 +66,29 @@ function Backups() {
     },
   });
 
+  function logOut() {
+    removeToken();
+    setGlobalToken(undefined);
+    navigate('/');
+  }
+
   const { isFetching, data } = useQuery({
     queryKey: ['backupSchedules'],
-    queryFn: (): Promise<BackupSchedule[]> =>
-      axios
-        .get(`${URL}/backup_schedules`, {
+    queryFn: async (): Promise<BackupSchedule[]> => {
+      try {
+        const res = await axios.get(`${URL}/backup_schedules`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        })
-        .then((res) => res.data),
+        });
+        return res.data;
+      } catch (error: any) {
+        if (error.response && error.response.status == 401) {
+          logOut();
+        }
+      }
+      return [];
+    },
   });
 
   useEffect(() => {
@@ -92,7 +106,7 @@ function Backups() {
   }
 
   const rows = data?.map((element, idx) => (
-    <tr key={`${id}-${idx}`}>
+    <tr key={element.uuid}>
       <td>
         <Text c="gray">{idx + 1}</Text>
       </td>
