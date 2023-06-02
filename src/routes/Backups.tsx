@@ -7,7 +7,8 @@ import { useLocalStorage } from 'react-use';
 import BackupForm from '../components/BackupForm';
 import { URL } from '../utilities/config';
 import { useGlobalLoading } from '../utilities/stores';
-import { BackupFormValues } from '../utilities/types';
+import { BackupFormValues, BackupScheduleRecord } from '../utilities/types';
+import RecordModal from '../components/RecordModal';
 
 type BackupSchedule = {
   uuid: string;
@@ -19,6 +20,9 @@ type BackupSchedule = {
 
 function Backups() {
   const [visible, setVisible] = useState(false);
+  const [backupRecordTitle, setBackupRecordTitle] = useState('');
+  const [backupRecords, setBackupRecords] = useState<BackupScheduleRecord[]>();
+
   const [_loading, setLoading] = useGlobalLoading();
   const [token] = useLocalStorage('token');
   const id = useId();
@@ -51,6 +55,17 @@ function Backups() {
     onSuccess: () => invalidateSchedules(),
   });
 
+  const recordsMutation = useMutation({
+    mutationFn: async (uuid: string) => {
+      const { data } = await axios.get(`${URL}/backup_schedule_records?uuid=${uuid}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return data;
+    },
+  });
+
   const { isFetching, data } = useQuery({
     queryKey: ['backupSchedules'],
     queryFn: (): Promise<BackupSchedule[]> =>
@@ -71,6 +86,12 @@ function Backups() {
     }
   }, [isFetching, addMutation.isLoading, deleteMutation.isLoading]);
 
+  async function openLogs(title: string, uuid: string) {
+    const data = await recordsMutation.mutateAsync(uuid);
+    setBackupRecordTitle(title);
+    setBackupRecords(data);
+  }
+
   const rows = data?.map((element, idx) => (
     <tr key={`${id}-${idx}`}>
       <td>
@@ -79,8 +100,10 @@ function Backups() {
       <td>{element.dbname}</td>
       <td>{element.host}</td>
       <td>{element.rrule}</td>
-      <td className="uppercase">{element.status}</td>
-      <td className="flex justify-end">
+      <td className="flex gap-x-6 justify-end">
+        <UnstyledButton c="blue" onClick={async () => await openLogs(element.dbname, element.uuid)}>
+          Logs
+        </UnstyledButton>
         <UnstyledButton c="red" onClick={async () => await deleteMutation.mutateAsync(element.uuid)}>
           Delete
         </UnstyledButton>
@@ -102,6 +125,9 @@ function Backups() {
   return (
     <>
       {visible && <BackupForm onSubmit={onSubmit} />}
+      {backupRecords && (
+        <RecordModal title={backupRecordTitle} records={backupRecords} onExit={() => setBackupRecords(undefined)} />
+      )}
 
       <Stack
         p="lg"
@@ -128,7 +154,6 @@ function Backups() {
                 <th>DB Name</th>
                 <th>Host</th>
                 <th>RRule</th>
-                <th>Status</th>
                 <th />
               </tr>
             </thead>
