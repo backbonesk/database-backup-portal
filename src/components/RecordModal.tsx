@@ -1,4 +1,4 @@
-import { Button, Stack, Title, Text, Table, Box } from '@mantine/core';
+import { Box, Button, Table, Text, Title } from '@mantine/core';
 import { BackupScheduleRecord } from '../utilities/types';
 
 type RecordModalProps = {
@@ -31,7 +31,7 @@ function RecordModal({ title, records, onExit }: RecordModalProps) {
           {element.status}
         </Text>
       </td>
-      <td>{element.backup_id}</td>
+      <td>{element.id}</td>
       <td>{element.created_at}</td>
       <td>{element.destination}</td>
       <td></td>
@@ -60,7 +60,7 @@ function RecordModal({ title, records, onExit }: RecordModalProps) {
                 <tr>
                   <th />
                   <th>status</th>
-                  <th>backup_id</th>
+                  <th>id</th>
                   <th>created_at</th>
                   <th>destination</th>
                 </tr>
