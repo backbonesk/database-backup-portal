@@ -15,7 +15,6 @@ type BackupSchedule = {
   dbname: string;
   host: string;
   rrule: string;
-  status: string;
 };
 
 function Backups() {
